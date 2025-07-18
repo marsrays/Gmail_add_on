@@ -67,12 +67,14 @@ Gmail_add_on/
 
 ### appsscript.json 設定
 #### oauthScopes
- - "https://www.googleapis.com/auth/calendar.addons.execute",	            // Calendar: 執行 Add-on 功能
- - "https://www.googleapis.com/auth/calendar.readonly",      	            // Calendar: 讀取日曆資訊
+ - "https://www.googleapis.com/auth/calendar.addons.execute",              // Calendar: 執行 Add-on 功能
+ - "https://www.googleapis.com/auth/calendar.readonly",                    // Calendar: 讀取日曆資訊
  - "https://www.googleapis.com/auth/drive.addons.metadata.readonly",       // Drive: 讀取 Drive 檔案的基本資料
  - "https://www.googleapis.com/auth/gmail.addons.current.action.compose",  // Gmail: 撰寫郵件時的操作
  - "https://www.googleapis.com/auth/gmail.addons.current.message.readonly",// Gmail: 讀取郵件內容
  - "https://www.googleapis.com/auth/gmail.addons.execute",                 // Gmail: 執行 Add-on 功能
+ - "https://www.googleapis.com/auth/gmail.addons.current.action.compose",  // Gmail: 建立新的草稿訊息和回覆
+ - "https://www.googleapis.com/auth/gmail.addons.current.message.metadata",// Gmail: 讀取訊息中繼資料 (例如主旨或收件者) 。不允許讀取訊息內容，且需要存取 token
  - "https://www.googleapis.com/auth/script.locale"                         // Script locale: 取得使用者的語言設定
 #### addOns
  - common // 共通設定，當其他專屬部分沒有設定時使用這裡的設定當預設
