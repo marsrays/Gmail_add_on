@@ -65,6 +65,32 @@ Gmail_add_on/
 2. 新增 Gmail API 服務
 3. 確認 `appsscript.json` 中的權限設定正確
 
+### appsscript.json 設定
+#### oauthScopes
+ - "https://www.googleapis.com/auth/calendar.addons.execute",	            // Calendar: 執行 Add-on 功能
+ - "https://www.googleapis.com/auth/calendar.readonly",      	            // Calendar: 讀取日曆資訊
+ - "https://www.googleapis.com/auth/drive.addons.metadata.readonly",       // Drive: 讀取 Drive 檔案的基本資料
+ - "https://www.googleapis.com/auth/gmail.addons.current.action.compose",  // Gmail: 撰寫郵件時的操作
+ - "https://www.googleapis.com/auth/gmail.addons.current.message.readonly",// Gmail: 讀取郵件內容
+ - "https://www.googleapis.com/auth/gmail.addons.execute",                 // Gmail: 執行 Add-on 功能
+ - "https://www.googleapis.com/auth/script.locale"                         // Script locale: 取得使用者的語言設定
+#### addOns
+ - common // 共通設定，當其他專屬部分沒有設定時使用這裡的設定當預設
+   - name // 名稱
+   - logoUrl // 元件圖標
+   - useLocaleFromApp // true: Add-on 會使用使用者當前語言, false: Add-on 會使用預設語言（通常是英文）
+   - homepageTrigger // 首頁觸發器: 當使用者開啟 Add-on 時會執行，若其他專屬部分也設定這一區塊，用專屬Apps裡時這裡設定會無效 (runFunction, enabled參數必填)
+   - universalActions // 通用動作陣列，openLink與runFunction二選一，可設置複數組不同功用按鈕
+ - gmail // Gmail 設定
+   - contextualTriggers // 上下文觸發器: 當使用者查看任何郵件時觸發函式
+   - composeTrigger // 撰寫觸發器: 在撰寫郵件時觸發函式，可設定多組 selectActions 按鈕動作
+   - draftAccess // 控制對草稿的存取權限 "NONE" 或 "METADATA"(event.draftMetadata)
+ - Drive // Drive 設定
+   - onItemsSelectedTrigger // 檔案選取觸發器
+ - Calendar // Calendar 設定
+   - eventOpenTrigger // 日曆事件觸發器
+
+
 ### 部署 Add-on
 
 1. 在 Google Apps Script 編輯器中點擊「部署」
