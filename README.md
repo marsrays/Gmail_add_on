@@ -57,14 +57,9 @@ Gmail_add_on/
 ### 匯入程式碼
 
 1. 刪除預設的 `Code.gs` 檔案
-2. 依序建立以下檔案並複製對應的程式碼：
-   - `appsscript.json` - 專案設定檔
-   - `main.js` - 主程序入口點
-   - `common.js` - 公用卡片元件
-   - `star.js` - 信件標記功能
-   - `statistics.js` - 郵件統計功能
+2. 將 `src/` 資料夾中的所有檔案內容複製到 Google Apps Script 專案中
 
-注意：將 `src/` 資料夾中的所有檔案內容複製到 Google Apps Script 專案中
+注意：本專案中的副檔名為 js 與 GAS 副檔名 gs 不同，是因為 gs 實際運作為 ES6 語法，只是 google 故意改成 gs，但一般編譯器不吃這特異副檔名，故使用通用的 js 副檔名！
 
 ### 設定權限
 
@@ -83,6 +78,7 @@ Gmail_add_on/
  - "https://www.googleapis.com/auth/gmail.addons.current.action.compose",  // Gmail: 建立新的草稿訊息和回覆
  - "https://www.googleapis.com/auth/gmail.addons.current.message.metadata",// Gmail: 讀取訊息中繼資料 (例如主旨或收件者) 。不允許讀取訊息內容，且需要存取 token
  - "https://www.googleapis.com/auth/script.locale"                         // Script locale: 取得使用者的語言設定
+ - "https://www.googleapis.com/auth/script.external_request"               // 外部呼叫權限
 #### addOns
  - common // 共通設定，當其他專屬部分沒有設定時使用這裡的設定當預設
    - name // 名稱
