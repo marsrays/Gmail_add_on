@@ -25,11 +25,18 @@ Google Apps Script add-on for Gmail
 ```
 Gmail_add_on/
 ├── src/
+│   ├── api.js           # 外部呼叫 RESTful api
 │   ├── appsscript.json  # 專案設定檔與 add-on 配置
+│   ├── cache.js         # 資料暫存元件
 │   ├── common.js        # 公用卡片元件
+│   ├── compose.js       # 寫信元件
+│   ├── contextual.js    # 讀信元件
+│   ├── label.js         # 標籤控制元件
 │   ├── main.js          # 主程序入口點
 │   ├── star.js          # 信件標記星號功能
-│   └── statistics.js    # 郵件統計功能
+│   ├── statistics.js    # 郵件統計功能
+│   ├── temp1.html       # html 模板1 (貓圖)
+│   └── temp2.html       # html 模板2 (動態輸入請假信)
 └── README.md           # 專案說明文件
 ```
 
