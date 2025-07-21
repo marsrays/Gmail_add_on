@@ -13,12 +13,13 @@ function getAllThreadsAdvanced(options = {}) {
     maxTotal = 999,
     sort = false
   } = options;
-
+  console.log(`options: ${options.query}`);
 
   let start = 0;
   let hasMore = true;
   const threads = []; // Reset allThreads
 
+  console.log(`開始載入...`);
   while (hasMore) {
     let batchThreads;
 
@@ -35,13 +36,13 @@ function getAllThreadsAdvanced(options = {}) {
     threads.push(...batchThreads);
     start += batchThreads.length;
 
-    Logger.log(`已載入 ${threads.length} 個 thread...`);
+    console.log(`已載入 ${threads.length} 個 thread...`);
     // 如果回傳的數量小於批次大小，表示沒有更多信件了
     if (batchThreads.length < batchSize) {
       hasMore = false;
     }
     if (start >= maxTotal) {
-      Logger.log(`載入達最大值： ${maxTotal}`);
+      console.log(`載入達最大值： ${maxTotal}`);
       hasMore = false;
     }
   }
@@ -56,7 +57,7 @@ function getAllThreadsAdvanced(options = {}) {
     });
   }
 
-  Logger.log(`總共取得 ${threads.length} 個 thread`);
+  console.log(`載入完成，總共取得 ${threads.length} 個 thread`);
   return threads;
 }
 
@@ -217,8 +218,7 @@ function onSaveContent(e) {
 
     return CardService.newNavigation().pushCard(createDefaultCard()); // 新卡片會生效
   } catch (error) {
-    Logger.log('錯誤：' + error.message);
+    console.log('錯誤：' + error.message);
     return createErrorCard(error.message);
   }
-
 }
