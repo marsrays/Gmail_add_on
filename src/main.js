@@ -53,14 +53,18 @@ function createMainCard(subjects, domains) {
     const section = CardService.newCardSection().setHeader("⭐ 各種操作");
 
     // 按鈕：重新統計
-    const todayButton = CardService.newTextButton()
-      .setText("當日統計")
-      .setOnClickAction(CardService.newAction().setFunctionName("todayStats"));
+    const todayButton = createFilledButton({
+      text: '當日統計',
+      functionName: 'todayStats',
+      icon: 'stacks'
+    });
 
-    // 按鈕：重新統計
-    const allButton = CardService.newTextButton()
-      .setText("全部統計")
-      .setOnClickAction(CardService.newAction().setFunctionName("allStats"));
+    // 按鈕：全部統計
+    const allButton = createFilledButton({
+      text: '全部統計',
+      functionName: 'allStats',
+      icon: 'view_timeline'
+    });
 
     // 按鈕：加星號（主題含 Fwd）
     const starButton = CardService.newTextButton()
@@ -72,10 +76,13 @@ function createMainCard(subjects, domains) {
       .setText("取消 Fwd 星號")
       .setOnClickAction(CardService.newAction().setFunctionName("removeFwdStars"));
 
-    // 按鈕：加星號（主題含 Fwd）
-    const addLabelButton = CardService.newTextButton()
-      .setText("新增標籤:資料庫")
-      .setOnClickAction(CardService.newAction().setFunctionName("markLabelDatabase"));
+    // 按鈕：新增標籤（資料庫）
+    const addLabelButton = createFilledButton({
+      text: '新增標籤:資料庫',
+      functionName: 'markLabelDatabase',
+      color: '#34A853',
+      icon: 'add'
+    });
 
     const switchDecoratedText = CardService.newDecoratedText()
       .setTopLabel('控制開關(預設:關閉)')
@@ -87,10 +94,13 @@ function createMainCard(subjects, domains) {
               .setValue('true')
       );
 
-    // 按鈕：加星號（主題含 Fwd）
-    const removeLabelButton = CardService.newTextButton()
-      .setText("移除標籤:資料庫")
-      .setOnClickAction(CardService.newAction().setFunctionName("removeLabelDatabase"));
+    // 按鈕：移除標籤（資料庫）
+    const removeLabelButton = createFilledButton({
+      text: '移除標籤:資料庫',
+      functionName: 'removeLabelDatabase',
+      color: '#FF0000',
+      icon: 'delete'
+    });
 
     // 按鈕：解除星號（主題含 Fwd）
     const exampleButton = CardService.newTextButton()
@@ -121,3 +131,5 @@ function createMainCard(subjects, domains) {
     return createErrorCard(error.message);
   }
 }
+
+

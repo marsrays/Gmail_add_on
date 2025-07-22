@@ -1,3 +1,7 @@
+function fetchLabelId(name) {
+  return Gmail.Users.Labels.list('me').labels.find(_ => _.name === name).id;
+}
+
 // createLabel(name)	GmailLabel	建立指定名稱的新使用者標籤。
 function addLabel(labelName, query) {
   let label = GmailApp.getUserLabelByName(labelName);
@@ -5,20 +9,35 @@ function addLabel(labelName, query) {
   if (!label) {
     console.log('Label not found. Create the label first.');
     label = GmailApp.createLabel(labelName);
+
+    // 標籤上色
+    // Gmail.Users.Labels.update({
+    //     name: name,
+    //     color: {
+    //       textColor: textColor, // #ffffff
+    //       backgroundColor: backgroundColor // #1c4587
+    //     }
+    //   }, 'me', fetchLabelId(name));
   }
 
   const threads = getAllThreadsAdvanced({query});
+  let skeep = 0;
 
   // label.addToThreads(threads);
   for (const thread of threads) {
+    const labels = thread.getLabels();
+    if (labels.some(label => label.getName() === labelName)) {
+      skeep++;
+      continue;
+    }
     GmailApp.moveThreadToArchive(thread); // 從收件匣移除（等同於「移動」到標籤）
     label.addToThread(thread);            // 加上標籤
   }
 
   return CardService.newActionResponseBuilder()
       .setNotification(
-          CardService.newNotification().setText(`完成加入標籤 : ${labelName} 共 ${threads.length} 封`),
-          )
+          CardService.newNotification().setText(`完成加入標籤 : ${labelName} 共 ${threads.length} 封 , 原有 ${skeep} 封, 新增 ${threads.length - skeep} 封`))
+      .setStateChanged(true)
       .build();
 }
 
@@ -46,8 +65,8 @@ function removeLabel(labelName, isDeleteLabel) {
 
   return CardService.newActionResponseBuilder()
       .setNotification(
-          CardService.newNotification().setText(`完成移除標籤 : ${labelName} 共 ${threads.length} 封 , 移除標籤 ${isDeleteLabel}`),
-          )
+          CardService.newNotification().setText(`完成移除標籤 : ${labelName} 共 ${threads.length} 封 , 移除標籤 ${isDeleteLabel}`))
+      .setStateChanged(true)
       .build();
 }
 

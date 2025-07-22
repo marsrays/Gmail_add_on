@@ -72,6 +72,57 @@ function getDateFormat(date, offset = 0) {
   }
 }
 
+// 印出物件內容
+function printObject(obj) {
+  indent = '{ ';
+  let count = 0;
+  for (var key in obj) {
+    if (!obj.hasOwnProperty(key)) continue;
+
+    var value = obj[key];
+    if (typeof value === 'object' && value !== null) {
+      indent = indent + `\n&nbsp;&nbsp;"${key}" : `;
+      indent = indent + `${printObject(value)}, `;
+    } else {
+      indent = indent + `\n&nbsp;&nbsp;"${key}" : "${value}", `;
+    }
+    count++;
+  }
+  indent = indent.replace(/,\s*$/, '');
+  if (count === 0) {
+    indent = indent + '}';
+  } else {
+    indent = indent + '\n}';
+  }
+
+  return indent;
+}
+
+function createFilledButton({text, functionName, color, icon}) {
+  // Create a new text button
+  const textButton = CardService.newTextButton();
+
+  // Set the button text
+  textButton.setText(text);
+
+  // Set the action to perform when the button is clicked
+  const action = CardService.newAction();
+  action.setFunctionName(functionName);
+  action.setLoadIndicator(CardService.LoadIndicator.SPINNER);
+  textButton.setOnClickAction(action);
+
+  if (color) {
+    // Set the button style to filled
+    textButton.setTextButtonStyle(CardService.TextButtonStyle.FILLED);
+    // Set the background color
+    textButton.setBackgroundColor(color);
+  }
+
+  textButton.setMaterialIcon(CardService.newMaterialIcon().setName(icon));  // See:https://fonts.google.com/icons?hl=zh-tw
+
+  return textButton;
+}
+
 // 通用訊息卡片
 function createInfoCard(message) {
   const card = CardService.newCardBuilder();

@@ -1,3 +1,24 @@
+/**
+ * Event e
+ * {
+ *    "clientPlatform": "web",
+ *    "hostApp": "gmail",
+ *    "gmail": {
+ *        "messageId": "msg-f:1888313095599270248",
+ *        "accessToken": "AND7SKXzD ... hpWGGgiVKJIWTT8ggOhpNw",
+ *        "threadId": "thread-f:1888313095599270248"
+ *    },
+ *    "commonEventObject": {
+ *        "hostApp": "GMAIL",
+ *        "platform": "WEB"
+ *    },
+ *    "messageMetadata": {
+ *        "accessToken": "AND7SKUQB1 ... 50JUFtfE1ChGzf3y7fpvw",
+ *        "messageId": "msg-f:1888313095599270248",
+ *        "threadId": "thread-f:1888313095599270248"
+ *    }
+ * }
+ */
 // 開啟郵件觸發
 function onGmailMessageOpen(e) {
   try {
@@ -30,6 +51,9 @@ function onGmailMessageOpen(e) {
             .setSubtitle('展示信件內容')
             .setImageStyle(CardService.ImageStyle.SQUARE)
             .setImageUrl('https://images.pexels.com/photos/1447255/pexels-photo-1447255.jpeg'))
+        .addSection(CardService.newCardSection().setHeader("ℹ️ 觸發輸入事件")
+            .addWidget(CardService.newTextParagraph()
+                .setText(`自動參數: <br><br>&nbsp;-&nbsp;e.gmail.accessToken :<br>${accessToken}<br><br>&nbsp;-&nbsp;e.gmail.messageId :<br>${messageId}`)))
         .addSection(CardService.newCardSection()
             .addWidget(CardService.newDecoratedText()
                 .setTopLabel("標題")

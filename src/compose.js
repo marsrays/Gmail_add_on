@@ -2,10 +2,32 @@
  * 請求撰寫介面時觸發的撰寫觸發器函數。建立並返回用於插入圖片的撰寫介面。
  *
  * @param {event} e 撰寫觸發事件物件
+ * {
+        "hostApp": "gmail",
+        "commonEventObject": {
+            "hostApp": "GMAIL",
+            "platform": "WEB"
+        },
+        "draftMetadata": {
+            "ccRecipients": {},
+            "bccRecipients": {},
+            "toRecipients": {
+                "0": "test.c@gmail.com"
+            },
+            "subject": "Re: 有人與你共用了試算表：..."
+        },
+        "clientPlatform": "web",
+        "gmail": {
+            "subject": "Re: 有人與你共用了試算表：...",
+            "toRecipients": {
+                "0": "test.c@gmail.com"
+            }
+        }
+    }
  * @return {Card[]}
  */
 function onGmailCompose(e) {
-  return [buildComposeCard()];
+  return [buildComposeCard(e)];
 }
 
 /**
@@ -13,7 +35,9 @@ function onGmailCompose(e) {
  *
  * @return {Card}
  */
-function buildComposeCard() {
+function buildComposeCard(e) {
+  var subject = e && e.gmail && e.gmail.subject ? e.gmail.subject : 'undefined';
+  var recipient = e && e.gmail && e.gmail.toRecipients && e.gmail.toRecipients["0"] ? e.gmail.toRecipients["0"] : 'undefined';
 
   var card = CardService.newCardBuilder();
   var header = CardService.newCardHeader()
@@ -23,11 +47,14 @@ function buildComposeCard() {
     <li>2.收件者</li>
     <li>3.副本</li>
     <li>4.密件副本</li>
-    <li>5.貓圖</li>
+    <li>5.請假範本</li>
+    <li>6.貓圖</li>
 </ul>`)
       .setImageStyle(CardService.ImageStyle.SQUARE)
       .setImageUrl('https://images.pexels.com/photos/281962/pexels-photo-281962.jpeg');
   var cardSection = CardService.newCardSection().setHeader('Update email');
+  cardSection.addWidget(CardService.newTextParagraph()
+  .setText(`觸發帶入參數: <br><br>&nbsp;-&nbsp;e.gmail.subject :<br>${subject}<br><br>&nbsp;-&nbsp;e.gmail.toRecipients["0"] :<br>${recipient}`));
   cardSection.addWidget(
       CardService.newTextButton()
           .setText('Update subject')
@@ -49,6 +76,7 @@ function buildComposeCard() {
           .setOnClickAction(CardService.newAction()
               .setFunctionName('updateBccRecipients')));
 
+  var tempSection = CardService.newCardSection().setHeader('Update by template');
   var inputSuperior = CardService.newTextInput()
       .setFieldName('superior')
       .setTitle('上級')
@@ -64,9 +92,9 @@ function buildComposeCard() {
           .setFunctionName('onGmailInsertLeaveAsk')
           .addRequiredWidget('superior')
           .addRequiredWidget('myName'));
-  cardSection.addWidget(inputSuperior);
-  cardSection.addWidget(inputMyName);
-  cardSection.addWidget(button);
+  tempSection.addWidget(inputSuperior);
+  tempSection.addWidget(inputMyName);
+  tempSection.addWidget(button);
 
 
   var input = CardService.newTextInput()
@@ -81,8 +109,9 @@ function buildComposeCard() {
         .setFunctionName('onGmailInsertCat'));
   var buttonSet = CardService.newButtonSet()
       .addButton(button);
-  cardSection.addWidget(input).addWidget(buttonSet);
-  return card.setHeader(header).addSection(cardSection).build();
+  tempSection.addWidget(input);
+  tempSection.addWidget(buttonSet);
+  return card.setHeader(header).addSection(cardSection).addSection(tempSection).build();
 }
 
 function onGmailInsertLeaveAsk(e) {
