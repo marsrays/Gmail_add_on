@@ -116,3 +116,51 @@ function authenticatedPostRequest() {
     return null;
   }
 }
+
+function getOpenAiApiKey() {
+  return PropertiesService.getScriptProperties().getProperty("OPENAI_API_KEY");
+}
+
+function generateReplyWithOpenAI(prompt) {
+  const apiKey = getOpenAiApiKey();
+  const url = "https://api.openai.com/v1/chat/completions";
+  const payload = {
+   model: "gpt-4.1",
+    messages: [
+    { role: "system", content: "您是負責回覆商務電子郵件的中文助理" },
+   { role: "user", content: prompt }
+     ],
+    temperature: 0.7
+  };
+
+  const options = {
+    method: "post",
+    contentType: "application/json",
+    headers: {
+      Authorization: "Bearer " + apiKey
+  },
+  payload: JSON.stringify(payload),
+    muteHttpExceptions: true
+  };
+
+  try {
+    const response = UrlFetchApp.fetch(url, options);
+    const result = JSON.parse(response.getContentText());
+
+    if (response.getResponseCode() !== 200) {
+      console.error("API Error (Status: " + response.getResponseCode() + "): " + (result.error ? result.error.message : response.getContentText()));
+      return `回應報錯，ResponseCode : ${response.getResponseCode()}`;
+    }
+
+    if (result.choices && result.choices.length > 0 && result.choices[0].message && result.choices[0].message.content) {
+      return result.choices[0].message.content.trim();
+    } else {
+      console.error("API Response Error: Unexpected response format.");
+      return "非預期的API回應格式";
+    }
+
+  } catch (e) {
+    console.error("API get expection: " + e.toString());
+    return "發生不預期的錯誤，請見LOG";
+  }
+}

@@ -3,6 +3,9 @@
   "dependencies": {
     "enabledAdvancedServices": []
   },
+  "urlFetchWhitelist": [
+    "https://api.openai.com/v1/chat/completions"
+  ],
   "oauthScopes": [
     "https://mail.google.com/",
     "https://www.googleapis.com/auth/gmail.addons.current.action.compose",
@@ -11,7 +14,8 @@
     "https://www.googleapis.com/auth/gmail.modify",
     "https://www.googleapis.com/auth/gmail.readonly",
     "https://www.googleapis.com/auth/script.locale",
-    "https://www.googleapis.com/auth/script.external_request"
+    "https://www.googleapis.com/auth/script.external_request",
+    "https://www.googleapis.com/auth/userinfo.email"
   ],
   "addOns": {
     "common": {

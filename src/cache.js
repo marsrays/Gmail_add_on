@@ -20,7 +20,6 @@ function setCache(key, value) {
 function getCache(key) {
   try {
     var serializedData = PropertiesService.getScriptProperties().getProperty(key);
-
     if (!serializedData) {
       Logger.log('Cache miss for key: ' + key);
       return null;

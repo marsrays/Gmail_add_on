@@ -123,6 +123,14 @@ function createFilledButton({text, functionName, color, icon}) {
   return textButton;
 }
 
+// 封裝換卡流程
+function updateCard(card) {
+  return CardService.newActionResponseBuilder()
+      .setStateChanged(true)
+      .setNavigation(CardService.newNavigation().updateCard(card))
+      .build();
+}
+
 // 通用訊息卡片
 function createInfoCard(message) {
   const card = CardService.newCardBuilder();
@@ -272,4 +280,98 @@ function onSaveContent(e) {
     console.log('錯誤：' + error.message);
     return createErrorCard(error.message);
   }
+}
+
+function onAItest() {
+  const threads = GmailApp.search('is:unread', 0, 1);
+  if (threads.length === 0) {
+    return;
+  }
+  const thread = threads[0];
+  const message = thread.getMessages()[thread.getMessages().length - 1];
+  const subject = message.getSubject();
+  const plainBody = message.getPlainBody();
+  const htmlBody = message.getBody();
+
+  console.log(`AItest ${subject}\nplainBody :\n${plainBody}`);
+  const prompt = `
+您是一位負責回覆商務郵件的助理。
+以下是我收到的郵件內容。
+我的寫作風格特色如下：
+
+[我的電子郵件寫作特色]
+---
+◾內部郵件：
+- 在開頭註明有出現在回文的收件人姓名（例如：致XX、YY、ZZ）
+- 以「感謝大家花費寶貴時間的回覆。我是 ${Session.getEffectiveUser().getUsername()}」開頭。
+- 使用清晰的指示、項目符號和連結組織資訊。
+- 內容明確，給予具體的行動指示，並明確說明截止日期。
+- 以「以上，感謝您的合作\n\nBest Regards\n\n${Session.getEffectiveUser().getUsername()}」結尾。
+
+請為我建立一封自然流暢的商務郵件回覆。
+*您無需包含收件人或簽名。
+*請僅產生回覆正文。腳本將自動新增原始郵件的引用。
+
+--- 收到的郵件內文 ---
+${plainBody}
+--- 結束 ---`;
+
+  const result = generateReplyWithOpenAI(prompt);
+  console.log(`AItest result :\n${result}`);
+  return createInfoCard(`💡 提示詞:\n${prompt}\n\n\n🤖 AI 回應:\n\n${result}`);
+}
+
+function buildTextareaCard() {
+  return updateCard(buildCardWithText(0, 'heLLo World\n這是預設文字\n換行\n\n你可以修改它\nHELLO WORLD'));
+}
+
+function buildCardWithText(idx, textValue) {
+  const textInput = CardService.newTextInput()
+    .setFieldName('myTextarea')         // 輸入框的識別名稱
+    .setTitle('請輸入內容')             // 顯示在輸入框上方的標題文字
+    .setHint('在這裡輸入多行文字…')     // 顯示在輸入框內的提示文字
+    .setMultiline(true)               // ✅ 設為多行（Textarea）
+    .setValue(textValue); // ✅ 設定預設值
+
+  const button = CardService.newTextButton()
+    .setText('World 置換成 Gmail')
+    .setOnClickAction(
+      CardService.newAction()
+        .setFunctionName('handleChangeText').setParameters({idx: `${idx + 1}`})
+    );
+  // 按鈕：home
+    const homeButton = createFilledButton({
+      text: '首頁',
+      functionName: 'homePage',
+      color: '#ECB576',
+      icon: 'keyboard_return'
+    });
+
+  const section = CardService.newCardSection().setHeader("第"+idx+"次置換")
+    .addWidget(textInput)
+    .addWidget(button);
+
+  const footer = CardService.newFixedFooter().setPrimaryButton(homeButton);
+
+  const card = CardService.newCardBuilder()
+    .addSection(section)
+    .setFixedFooter(footer)
+    .build();
+
+  return card;
+}
+
+function handleChangeText(e) {
+  const userInput = e.formInput.myTextarea;
+  const idx = parseInt(e.parameters.idx, 10);
+
+  // 使用正規式將 Hello world 換成 Hello Gmail
+  const newText = userInput.replace(/hello world/ig, 'Hello Gmail');
+
+  const newCard = buildCardWithText(idx, newText);
+
+  return CardService.newActionResponseBuilder()
+      .setStateChanged(true)
+      .setNavigation(CardService.newNavigation().updateCard(newCard))
+      .build();
 }

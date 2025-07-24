@@ -107,6 +107,7 @@ function allStats(e) {
   // 使用 Cache
   let subjects = getCache("allSubjects");
   let domains = getCache("allDomains");
+  let isCache = true;
   if (subjects === null) {
     const threads = getAllThreadsAdvanced({
           query: `in:anywhere`,
@@ -124,9 +125,20 @@ function allStats(e) {
 
   // return createMainCard(subjects, domains);
   // 不直接回傳 card，使用 updateCard 方法直接換掉(不會有上一頁產生)
+  var notificaText = '';
+  if (isCache) {
+    notificaText = '全部統計操作完成！ (cache)';
+  } else {
+    notificaText = '全部統計操作完成！';
+  }
+  var notification = CardService.newNotification()
+     .setText(notificaText)
+     .setType(CardService.NotificationType.INFO);
   var navigation = CardService.newNavigation()
       .updateCard(createMainCard(subjects, domains));
   var actionResponse = CardService.newActionResponseBuilder()
+      .setNotification(notification)
+      .setStateChanged(true)  // 通知系統狀態有變化
       .setNavigation(navigation);
   return actionResponse.build();
 }

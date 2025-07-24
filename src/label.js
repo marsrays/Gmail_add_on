@@ -80,3 +80,4 @@ function removeLabelDatabase(e) {
   const isDeleteLabel = (e && e.formInput) ? e.formInput.isDeleteLabel === 'true' : false;
   return removeLabel('數據庫', isDeleteLabel);
 }
+
