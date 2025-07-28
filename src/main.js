@@ -94,13 +94,20 @@ function createMainCard(subjects, domains) {
       .setText("官方範例")
       .setOnClickAction(CardService.newAction().setFunctionName("createDefaultCard"));
 
-    // 按鈕：官方示範卡片（主題含 Fwd）
+    // 按鈕：AI卡片（主題含 Fwd）
     const aiButton = createFilledButton({
       text: 'AI回應',
       functionName: 'onAItest',
       color: '#FFAA00',
       icon: 'lightbulb'
     });
+
+    // 按鈕：官方示範卡片（主題含 Fwd）
+    const triggerButton = CardService.newTextButton()
+      .setText("定時器")
+      .setOnClickAction(CardService.newAction().setFunctionName("buildTriggerCard"));
+
+
 
     section.addWidget(textareaButton);
     section.addWidget(todayButton);
@@ -110,7 +117,8 @@ function createMainCard(subjects, domains) {
       .addButton(starButton)
       .addButton(unstarButton)
       .addButton(exampleButton)
-      .addButton(aiButton));
+      .addButton(aiButton)
+      .addButton(triggerButton));
 
     card.addSection(section);
 
