@@ -4,6 +4,7 @@ function buildAddOn(e) {
   try {
     // logAllEmailBatch();
     // simpleGetRequest('https://www.stdtime.gov.tw/Home/GetServerTime');
+    // analyzeGmailImageOCR();
 
     // clearAllCache();
     clearCache("todaySubjects");
@@ -106,7 +107,6 @@ function createMainCard(subjects, domains) {
     const triggerButton = CardService.newTextButton()
       .setText("定時器")
       .setOnClickAction(CardService.newAction().setFunctionName("buildTriggerCard"));
-
 
 
     section.addWidget(textareaButton);
