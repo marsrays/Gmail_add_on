@@ -221,7 +221,7 @@ function createDefaultCard() {
                         CardService.newTextButton().setText('Share').setOpenLink(
                             CardService.newOpenLink().setUrl(
                                 'https://example.com/share'),
-                            ),
+                            ).setOpenAs(CardService.OpenAs.OVERLAY).setOnClose(CardService.OnClose.RELOAD),
                         )
                     .addButton(
                         CardService.newTextButton()
