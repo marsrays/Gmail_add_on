@@ -375,3 +375,27 @@ function handleChangeText(e) {
       .setNavigation(CardService.newNavigation().updateCard(newCard))
       .build();
 }
+
+function readGoogleDoc(docId) { // 需要 oauthScopes : "https://www.googleapis.com/auth/documents"
+  try {
+    // 讀取 Google 文件（Google Docs）
+    const doc = DocumentApp.openById(docId);
+
+    // 取得整份文件的 Body 內容
+    const body = doc.getBody();
+
+    // 進行文字操作
+//    body.appendParagraph('這是新增加的一行文字 ✅');
+//    body.insertParagraph(0, '文件最上方新增的標題 ✨');
+//    body.replaceText('Hello', '您好');  // 全文替換
+
+    // Apps Script 操作完會自動儲存，不需要額外「save」指令
+//    doc.saveAndClose();  // （建議）確保文件關閉並刷新內容
+
+    return body.getText();
+
+  } catch (err) {
+    Logger.log('讀取文件發生錯誤: ' + err);
+    return '發生錯誤: ' + err;
+  }
+}
