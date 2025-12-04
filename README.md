@@ -4,7 +4,7 @@ Google Apps Script add-on for Gmail
 
 ## 專案簡介
 
-這是一個測試並實作 Gmail add-on 的專案，主要示範如何用 Google Apps Script 撰寫的 add-on 實作與 Gmail 互動。
+這是一個測試並實作 [Gmail add-on](https://github.com/marsrays/Gmail_add_on) 的專案，主要示範如何用 Google Apps Script 撰寫的 add-on 實作與 Gmail 互動。
 
 ## 功能特色
 
@@ -48,6 +48,7 @@ Gmail_add_on/
 
 ### 前置需求
 
+- Download [Gmail_add_on](https://github.com/marsrays/Gmail_add_on) scripts project
 - Google 帳戶
 - Gmail 存取權限
 - Google Apps Script 存取權限
