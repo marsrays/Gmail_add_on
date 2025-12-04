@@ -140,6 +140,15 @@ function createInfoCard(message) {
   return card.build();
 }
 
+// 跳出提示語
+function createNoticeCard(text) {
+  return CardService.newActionResponseBuilder()
+      .setNotification(
+          CardService.newNotification().setText(text))
+      .setStateChanged(true)
+      .build();
+}
+
 // 若無信件，顯示 "無信件" 訊息
 function createNoEmailCard() {
   return CardService.newCardBuilder()
