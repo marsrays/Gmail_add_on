@@ -12,12 +12,13 @@ Google Apps Script add-on for Gmail
 - **郵件統計**: 提供各種郵件統計資訊
 - **自訂介面**: 整合 Gmail 側邊欄的使用者介面
 - **即時互動**: 與 Gmail 信件進行即時互動
+- **結合 AI**: 透過 webhook 綁定以及與 google chat bot 互動，可與 AI 互動並進行各種操作
 
 ## 技術架構
 
 - **開發語言**: JavaScript (Google Apps Script)
 - **平台**: Google Workspace
-- **整合服務**: Gmail API
+- **整合服務**: Gmail API, Google Chat API, Cloud Vision API, Google Workspace Marketplace SDK
 - **介面框架**: Card Service
 
 ## 檔案結構
@@ -28,6 +29,8 @@ Gmail_add_on/
 │   ├── api.js           # 外部呼叫 RESTful api
 │   ├── appsscript.json  # 專案設定檔與 add-on 配置
 │   ├── cache.js         # 資料暫存元件
+│   ├── chat.js          # Google Chat 元件
+│   ├── chat_messages.js # Google Chat 訊息模板
 │   ├── common.js        # 公用卡片元件
 │   ├── compose.js       # 寫信元件
 │   ├── contextual.js    # 讀信元件
@@ -36,7 +39,8 @@ Gmail_add_on/
 │   ├── star.js          # 信件標記星號功能
 │   ├── statistics.js    # 郵件統計功能
 │   ├── temp1.html       # html 模板1 (貓圖)
-│   └── temp2.html       # html 模板2 (動態輸入請假信)
+│   ├── temp2.html       # html 模板2 (動態輸入請假信)
+│   └── trigger.js       # 觸發器元件
 └── README.md           # 專案說明文件
 ```
 
@@ -47,6 +51,8 @@ Gmail_add_on/
 - Google 帳戶
 - Gmail 存取權限
 - Google Apps Script 存取權限
+- Google Cloud 帳戶 (使用 Vision AI or Chat BOT 才需要)
+- ChatGPT API key (使用 ChatGPT AI 才需要
 
 ### 建立專案
 
@@ -71,14 +77,16 @@ Gmail_add_on/
 #### oauthScopes
  - "https://www.googleapis.com/auth/calendar.addons.execute",              // Calendar: 執行 Add-on 功能
  - "https://www.googleapis.com/auth/calendar.readonly",                    // Calendar: 讀取日曆資訊
+ - "https://www.googleapis.com/auth/chat.messages"                         // Google Chat: 收發訊息到聊天室
  - "https://www.googleapis.com/auth/drive.addons.metadata.readonly",       // Drive: 讀取 Drive 檔案的基本資料
- - "https://www.googleapis.com/auth/gmail.addons.current.action.compose",  // Gmail: 撰寫郵件時的操作
+ - "https://www.googleapis.com/auth/gmail.addons.current.action.compose",  // Gmail: 撰寫郵件時的操作，建立新的草稿訊息和回覆
  - "https://www.googleapis.com/auth/gmail.addons.current.message.readonly",// Gmail: 讀取郵件內容
  - "https://www.googleapis.com/auth/gmail.addons.execute",                 // Gmail: 執行 Add-on 功能
- - "https://www.googleapis.com/auth/gmail.addons.current.action.compose",  // Gmail: 建立新的草稿訊息和回覆
  - "https://www.googleapis.com/auth/gmail.addons.current.message.metadata",// Gmail: 讀取訊息中繼資料 (例如主旨或收件者) 。不允許讀取訊息內容，且需要存取 token
  - "https://www.googleapis.com/auth/script.locale"                         // Script locale: 取得使用者的語言設定
  - "https://www.googleapis.com/auth/script.external_request"               // 外部呼叫權限
+ - "https://www.googleapis.com/auth/script.scriptapp"                      // ScriptApp.newTrigger 觸發器
+ - "https://www.googleapis.com/auth/userinfo.email"                        // 取得當前使用者 email 資訊
 #### addOns
  - common // 共通設定，當其他專屬部分沒有設定時使用這裡的設定當預設
    - name // 名稱
