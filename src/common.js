@@ -408,3 +408,8 @@ function readGoogleDoc(docId) { // 需要 oauthScopes : "https://www.googleapis.
     return '發生錯誤: ' + err;
   }
 }
+
+function chatNotify() {
+  callChatWebhook(`https://chat.googleapis.com/v1/spaces/${spaceId}/messages??key=${key}&token=${token}`, getEmailAlertMessage());
+  return createNoticeCard('✅ 已發送通知到 Google Chat');
+}

@@ -103,10 +103,18 @@ function createMainCard(subjects, domains) {
       icon: 'lightbulb'
     });
 
-    // 按鈕：官方示範卡片（主題含 Fwd）
+    // 按鈕：排程定時器
     const triggerButton = CardService.newTextButton()
       .setText("定時器")
       .setOnClickAction(CardService.newAction().setFunctionName("buildTriggerCard"));
+
+    // 按鈕：發訊息到 Google Chat
+    const notifyButton = createFilledButton({
+      text: '發訊息到Google Chat',
+      functionName: 'chatNotify',
+      color: '#804000',
+      icon: 'chat_add_on'
+    });
 
 
     section.addWidget(textareaButton);
@@ -118,7 +126,8 @@ function createMainCard(subjects, domains) {
       .addButton(unstarButton)
       .addButton(exampleButton)
       .addButton(aiButton)
-      .addButton(triggerButton));
+      .addButton(triggerButton)
+      .addButton(notifyButton));
 
     card.addSection(section);
 

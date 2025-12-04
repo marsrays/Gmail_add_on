@@ -201,3 +201,14 @@ function callVisionOCR(base64Image) {
   const text = result.responses?.[0]?.fullTextAnnotation?.text || "（沒有辨識到文字）";
   return text;
 }
+
+function callChatWebhook(url, message) {
+  //const url = `https://chat.googleapis.com/v1/spaces/${spaceId}/messages??key=${key}&token=${token}`;
+  UrlFetchApp.fetch(url, {
+    method: 'post',
+    contentType: 'application/json',
+    payload: JSON.stringify(message)
+  });
+
+  console.log(`chatWebhook url : ${url} , message : ${JSON.stringify(message)}`);
+}
